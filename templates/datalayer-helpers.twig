@@ -1,0 +1,25 @@
+{# Include datalayer helpers where events are needed. templates/_partials/datalayer-helpers.twig #}
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  // Helper: safe push
+  function dlPush(obj){ try { window.dataLayer.push(obj); } catch(e){} }
+
+  // Helper: simple UTM parser
+  function getUtmParams() {
+    var p = new URLSearchParams(window.location.search);
+    return {
+      source: p.get('utm_source') || null,
+      medium: p.get('utm_medium') || null,
+      campaign: p.get('utm_campaign') || null,
+      term: p.get('utm_term') || null,
+      content: p.get('utm_content') || null
+    };
+  }
+
+  // Helper: detect social referrers
+  function isSocialReferrer() {
+    var r = document.referrer || '';
+    return /(facebook|instagram|t\.co|twitter|x\.com|linkedin|pinterest|youtube|tiktok)\./i.test(r);
+  }
+</script>
