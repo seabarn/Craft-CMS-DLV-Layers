@@ -1,0 +1,37 @@
+# Craft CMS Data Layer Snippets for GTM + GA4
+
+This repo contains Twig snippets for pushing ecommerce and signup events 
+from Craft CMS into the `window.dataLayer`, to be consumed by Google Tag Manager.
+
+## Events implemented
+- `view_item` (product pages)
+- `view_cart` (cart page)
+- `begin_checkout` (checkout start)
+- `purchase` (confirmation, includes de-dupe guard)
+- `sign_up` (wine club)
+- `newsletter_subscription` (newsletter form)
+- `traffic_source` (social/referral start)
+
+## Usage
+1. Copy `templates/_partials/datalayer/` into your Craft project.
+2. In each relevant template, include the partial above your GTM container.
+
+Example:
+```twig
+{% include "_partials/datalayer/_checkout-complete.twig" with { order: order } %}
+
+craft-datalayer/
+├── README.md                # Overview, setup instructions
+├── gtm-mapping.md           # Table of DLVs → GTM Vars → GA4 Params
+├── templates/
+│   └── _partials/
+│       └── datalayer/
+│           ├── _product-view-item.twig
+│           ├── _cart-view-cart.twig
+│           ├── _checkout-begin.twig
+│           ├── _checkout-complete.twig
+│           ├── _wineclub-signup.twig
+│           ├── _newsletter-subscription.twig
+│           └── _traffic-source.twig
+└── helpers/
+    └── datalayer-helpers.twig
