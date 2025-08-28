@@ -1,0 +1,11 @@
+{% set user = craft.app.user.identity ?? null %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'sign_up',
+    method: 'wine_club',
+    // GA4 does not accept PII. Use non-PII identifiers only.
+    user_id: {{ (user ? user.id : null)|json_encode }},
+    plan: {{ (clubPlanHandle ?? 'standard')|json_encode }}
+  });
+</script>
