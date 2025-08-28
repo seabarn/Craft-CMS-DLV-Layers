@@ -1,0 +1,23 @@
+{% set cart = craft.commerce.carts.cart %}
+{% if cart and cart.lineItems|length %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'view_cart',
+    currency: {{ cart.paymentCurrency|default('NZD')|json_encode }},
+    value: {{ cart.totalPrice|number_format(2, '.', '')|json_encode }},
+    items: [
+      {% for li in cart.lineItems %}
+      {
+        item_id: {{ li.sku|json_encode }},
+        item_name: {{ (li.snapshot.title ?? li.description ?? li.sku)|json_encode }},
+        price: {{ li.salePrice|number_format(2, '.', '')|json_encode }},
+        quantity: {{ li.qty|json_encode }},
+        item_brand: {{ 'Poppies Martinborough'|json_encode }},
+        item_category: {{ (li.snapshot.product.type.handle ?? 'Product')|json_encode }}
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  });
+</script>
+{% endif %}
