@@ -10,7 +10,6 @@ from Craft CMS into the `window.dataLayer`, to be consumed by Google Tag Manager
 - `purchase` (confirmation, includes de-dupe guard)
 - `sign_up` (wine club)
 - `newsletter_subscription` (newsletter form)
-- `traffic_source` (social/referral start)
 
 ## Usage
 1. Copy `templates/_partials/datalayer/` into your Craft project.
