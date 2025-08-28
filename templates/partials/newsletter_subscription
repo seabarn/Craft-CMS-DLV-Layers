@@ -1,0 +1,9 @@
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'newsletter_subscription',
+    method: {{ (newsletterMethod ?? 'form')|json_encode }},
+    form_id: {{ (newsletterFormId ?? 'newsletter-footer')|json_encode }},
+    source_page: {{ (entry.uri ?? craft.app.request.pathInfo)|json_encode }}
+  });
+</script>
