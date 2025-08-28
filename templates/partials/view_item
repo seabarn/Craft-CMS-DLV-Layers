@@ -1,0 +1,32 @@
+{# Typical template: templates/store/_product.twig #}
+
+{% set activeVariant = variant ?? product.defaultVariant %}
+{% set currencyIso = craft.commerce.paymentCurrencies.primaryIso ?? 'NZD' %}
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'view_item',
+    currency: {{ currencyIso|json_encode }},
+    value: {{ (activeVariant.price)|number_format(2, '.', '')|json_encode }},
+    items: [{
+      item_id: {{ (activeVariant.sku ?? product.slug)|json_encode }},
+      item_name: {{ product.title|json_encode }},
+      price: {{ (activeVariant.price)|number_format(2, '.', '')|json_encode }},
+      item_brand: {{ 'Poppies Martinborough'|json_encode }},
+      item_category: {{ product.type.handle|json_encode }}
+    }]
+  });
+</script>
+
+{# Optional add-to-cart helper on the same page: #}
+<script>
+  function pushAddToCart(item){
+    window.dataLayer.push({
+      event: 'add_to_cart',
+      currency: {{ currencyIso|json_encode }},
+      value: Number(item.price) * Number(item.quantity || 1),
+      items: [item]
+    });
+  }
+</script>
