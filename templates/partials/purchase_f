@@ -1,0 +1,34 @@
+{# assumes `order` is the completed order element #}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  // simple de-dupe using sessionStorage
+  (function(){
+    var txn = {{ order.number|json_encode }};
+    var key = 'dl_purchase_' + txn;
+    if (sessionStorage.getItem(key)) { return; }
+    sessionStorage.setItem(key, '1');
+    window.dataLayer.push({
+      event: 'purchase',
+      currency: {{ order.paymentCurrency|default('NZD')|json_encode }},
+      transaction_id: txn,
+      affiliation: "Online Store",
+      value: {{ order.total }},
+      coupon: {{ order.couponCode|default(null)|json_encode }},
+      payment_type: {{ (order.gateway.name ?? order.gateway.handle ?? 'unknown')|json_encode }},
+      tax: {{ order.totalTax ?? 0 }},
+      shipping: {{ order.totalShippingCost ?? 0 }},
+      items: [
+        {% for li in order.lineItems %}
+        {
+          item_id: {{ li.sku|json_encode }},
+          item_name: {{ (li.snapshot.title ?? li.description ?? li.sku)|json_encode }},
+          item_brand: {{ 'Poppies Martinborough'|json_encode }},
+          item_category: {{ (li.snapshot.product.type.handle ?? 'Product')|json_encode }},
+          item_price: {{ li.salePrice }},
+          quantity: {{ li.qty }}
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    });
+  })();
+</script>
